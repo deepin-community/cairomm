@@ -48,7 +48,7 @@ namespace Cairo
  *
  * Context is a reference-counted object that should be used via Cairo::RefPtr.
  */
-class Context
+class CAIROMM_API Context
 {
 protected:
   explicit Context(const RefPtr<Surface>& target);
@@ -1300,10 +1300,18 @@ public:
   Operator get_operator() const;
 
   /// @{
-  /** Gets the current source pattern for the Context
+  /** Gets the current source pattern for the %Context
    */
   RefPtr<Pattern> get_source();
   RefPtr<const Pattern> get_source() const;
+
+  /** Gets the current source surface pattern for the %Context, if any.
+   *
+   * @returns The source pattern, if it is a surface pattern,
+   *          else an empty RefPtr.
+   */
+  RefPtr<SurfacePattern> get_source_for_surface();
+  RefPtr<const SurfacePattern> get_source_for_surface() const;
   /// @}
 
   /** Gets the current tolerance value, as set by set_tolerance()

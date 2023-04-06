@@ -173,6 +173,7 @@ SurfacePattern::~SurfacePattern()
 {
 }
 
+#ifndef CAIROMM_DISABLE_DEPRECATED
 void SurfacePattern::set_extend(Extend extend)
 {
   Pattern::set_extend(extend);
@@ -182,6 +183,7 @@ Extend SurfacePattern::get_extend() const
 {
   return Pattern::get_extend();
 }
+#endif //CAIROMM_DISABLE_DEPRECATED
 
 void SurfacePattern::set_filter(Filter filter)
 {

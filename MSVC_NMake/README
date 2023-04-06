@@ -1,0 +1,33 @@
+Building cairomm with Visual Studio .NET 2015 or later
+
+* You will need Visual Studio 2015 (MSVC 14.0) or later.  Building with Visual Studio 2015 or earlier is no longer
+  supported.
+* Install the latest Win32 GTK+ Development files from ftp://ftp.gnome.org/pub/GNOME/binaries/win32/gtk+/ and add
+  the paths to headers and import libraries to Visual Studio, if they are not already in
+  $(srcroot)/../vs$(VSVER)/$(Platform).
+* It is recommended (and possibly required) that you build cairomm and software that depends on cairomm with the
+  same compiler, even though Microsoft tried hard to make things API and ABI compatible between Visual Studio
+  2015, 2017 and 2019, so the build distinguishes between these versions with 'vc140' (2015), 'vc141' (2017) and
+  'vc142' (2019) in the output DLL and .lib filenames, as per the toolset version as Microsoft defined.  If using
+  'vc140' in the DLL and .lib names are desired (such as when rebuilding software that depends on cairomm is
+  not convenient), pass in 'USE_COMPAT_LIBS=1' in your NMake command line (note that doing this is not recommended).
+  For the Meson builds, pass in the option '-Dmsvc14x-parallel-installable=false' to the Meson configure command line
+  to avoid having the toolset version in the final DLL and .lib filenames; again, this is only recommended if it is
+  inconvenient to re-build the dependent code.
+* In a Visual Studio command prompt, go to $(srcroot)\MSVC_NMake
+* Build using nmake /f Makefile.vc CFG=[release|debug].
+* Run the tests
+* If it is inconvenient for you to re-build any software using
+  cairomm, you may need to pass in BUILD_COMPAT_LIB in your
+  NMake command line so that your application will continue to
+  run properly.
+
+Cedric Gustin
+08/18/2006
+
+Armin Burgmeier
+09/29/2010
+
+Chun-wei Fan
+09/10/2015
+10/26/2018

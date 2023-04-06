@@ -17,9 +17,6 @@
  */
 
 /* M_PI is defined in math.h in the case of Microsoft Visual C++ */
-#if defined(_MSC_VER)
-#define _USE_MATH_DEFINES
-#endif 
 
 #include <cairommconfig.h>
 #include <cairomm/context.h>
@@ -28,11 +25,6 @@
 #include <cairomm/surface.h>
 #include <cairomm/script_surface.h>
 #include <cairomm/scaledfont.h>
-
-/* M_PI is defined in math.h in the case of Microsoft Visual C++ */
-#if defined(_MSC_VER)
-#define _USE_MATH_DEFINES
-#endif
 
 /* Solaris et. al. need math.h for M_PI too */
 #include <cmath>
@@ -159,6 +151,7 @@ void Context::set_line_join(LineJoin line_join)
   check_object_status_and_throw_exception(*this);
 }
 
+#ifndef CAIROMM_DISABLE_DEPRECATED
 void Context::set_dash(std::valarray<double>& dashes, double offset)
 {
   std::vector<double> v(dashes.size());
@@ -171,10 +164,11 @@ void Context::set_dash(std::valarray<double>& dashes, double offset)
 void Context::set_dash(std::vector<double>& dashes, double offset)
 {
   cairo_set_dash(cobj(),
-    (dashes.empty() ? 0 : &dashes[0]),
+    (dashes.empty() ? nullptr : &dashes[0]),
     dashes.size(), offset);
   check_object_status_and_throw_exception(*this);
 }
+#endif //CAIROMM_DISABLE_DEPRECATED
 
 void Context::set_dash(const std::valarray<double>& dashes, double offset)
 {
@@ -188,14 +182,14 @@ void Context::set_dash(const std::valarray<double>& dashes, double offset)
 void Context::set_dash(const std::vector<double>& dashes, double offset)
 {
   cairo_set_dash(cobj(),
-    (dashes.empty() ? 0 : &dashes[0]),
+    (dashes.empty() ? nullptr : &dashes[0]),
     dashes.size(), offset);
   check_object_status_and_throw_exception(*this);
 }
 
 void Context::unset_dash()
 {
-  cairo_set_dash(cobj(), NULL, 0, 0.0);
+  cairo_set_dash(cobj(), nullptr, 0, 0.0);
   check_object_status_and_throw_exception(*this);
 }
 
@@ -259,12 +253,13 @@ void Context::set_identity_matrix()
   check_object_status_and_throw_exception(*this);
 }
 
-//deprecated:
+#ifndef CAIROMM_DISABLE_DEPRECATED
 void Context::user_to_device(double& x, double& y)
 {
   const Context* constThis = this;
   constThis->user_to_device(x, y);
 }
+#endif //CAIROMM_DISABLE_DEPRECATED
 
 void Context::user_to_device(double& x, double& y) const
 {
@@ -272,12 +267,13 @@ void Context::user_to_device(double& x, double& y) const
   check_object_status_and_throw_exception(*this);
 }
 
-//deprecated:
+#ifndef CAIROMM_DISABLE_DEPRECATED
 void Context::user_to_device_distance(double& dx, double& dy)
 {
   const Context* constThis = this;
   constThis->user_to_device_distance(dx, dy);
 }
+#endif //CAIROMM_DISABLE_DEPRECATED
 
 void Context::user_to_device_distance(double& dx, double& dy) const
 {
@@ -285,12 +281,13 @@ void Context::user_to_device_distance(double& dx, double& dy) const
   check_object_status_and_throw_exception(*this);
 }
 
-//deprecated:
+#ifndef CAIROMM_DISABLE_DEPRECATED
 void Context::device_to_user(double& x, double& y)
 {
   const Context* constThis = this;
   constThis->device_to_user(x, y);
 }
+#endif //CAIROMM_DISABLE_DEPRECATED
 
 void Context::device_to_user(double& x, double& y) const
 {
@@ -298,12 +295,13 @@ void Context::device_to_user(double& x, double& y) const
   check_object_status_and_throw_exception(*this);
 }
 
-//deprecated:
+#ifndef CAIROMM_DISABLE_DEPRECATED
 void Context::device_to_user_distance(double& dx, double& dy)
 {
   const Context* constThis = this;
   constThis->device_to_user_distance(dx, dy);
 }
+#endif //CAIROMM_DISABLE_DEPRECATED
 
 void Context::device_to_user_distance(double& dx, double& dy) const
 {
@@ -595,9 +593,9 @@ void Context::show_text_glyphs(const std::string& utf8,
                                TextClusterFlags cluster_flags)
 {
   cairo_show_text_glyphs(cobj(), utf8.c_str(), utf8.size(),
-                         (glyphs.empty() ? 0 : &glyphs[0]),
+                         (glyphs.empty() ? nullptr : &glyphs[0]),
                          glyphs.size(),
-                         (clusters.empty() ? 0 : &clusters[0]),
+                         (clusters.empty() ? nullptr : &clusters[0]),
                          clusters.size(),
                          static_cast<cairo_text_cluster_flags_t>(cluster_flags));
   check_object_status_and_throw_exception(*this);
@@ -606,7 +604,7 @@ void Context::show_text_glyphs(const std::string& utf8,
 void Context::show_glyphs(const std::vector<Glyph>& glyphs)
 {
   cairo_show_glyphs(cobj(),
-    const_cast<cairo_glyph_t*>((glyphs.empty() ? 0 : &glyphs[0])),
+    const_cast<cairo_glyph_t*>((glyphs.empty() ? nullptr : &glyphs[0])),
     glyphs.size());
   check_object_status_and_throw_exception(*this);
 }
@@ -646,7 +644,7 @@ void Context::get_text_extents(const std::string& utf8, TextExtents& extents) co
 void Context::get_glyph_extents(const std::vector<Glyph>& glyphs, TextExtents& extents) const
 {
   cairo_glyph_extents(const_cast<cobject*>(cobj()),
-                      const_cast<cairo_glyph_t*>(glyphs.empty() ? 0 : &glyphs[0]),
+                      const_cast<cairo_glyph_t*>(glyphs.empty() ? nullptr : &glyphs[0]),
                       glyphs.size(), &extents);
   check_object_status_and_throw_exception(*this);
 }
@@ -660,7 +658,7 @@ void Context::text_path(const std::string& utf8)
 void Context::glyph_path(const std::vector<Glyph>& glyphs)
 {
   cairo_glyph_path(cobj(),
-    const_cast<cairo_glyph_t*>(glyphs.empty() ? 0 : &glyphs[0]),
+    const_cast<cairo_glyph_t*>(glyphs.empty() ? nullptr : &glyphs[0]),
     glyphs.size());
   check_object_status_and_throw_exception(*this);
 }
@@ -707,6 +705,21 @@ RefPtr<const Pattern> Context::get_source() const
   auto pattern = cairo_get_source(const_cast<cobject*>(cobj()));
   check_object_status_and_throw_exception(*this);
   return RefPtr<const Pattern>::cast_const (get_pattern_wrapper (pattern));
+}
+
+RefPtr<SurfacePattern> Context::get_source_for_surface()
+{
+  auto pattern = cairo_get_source(cobj());
+  check_object_status_and_throw_exception(*this);
+  auto pattern_type = cairo_pattern_get_type(pattern);
+  if (pattern_type != CAIRO_PATTERN_TYPE_SURFACE)
+    return {};
+  return RefPtr<SurfacePattern>(new SurfacePattern(pattern, false /* does not have reference */));
+}
+
+RefPtr<const SurfacePattern> Context::get_source_for_surface() const
+{
+  return const_cast<Context*>(this)->get_source_for_surface();
 }
 
 double Context::get_tolerance() const

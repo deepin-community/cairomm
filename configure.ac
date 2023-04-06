@@ -15,7 +15,8 @@
 ## You should have received a copy of the GNU Lesser General Public License
 ## along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
-AC_INIT([cairomm], [1.12.2], [https://bugs.freedesktop.org/enter_bug.cgi?product=cairomm],
+AC_INIT([cairomm], [1.14.4],
+        [https://gitlab.freedesktop.org/cairo/cairomm/-/issues],
         [cairomm], [http://www.cairographics.org/cairomm/])
 AC_PREREQ([2.62])
 
@@ -24,8 +25,10 @@ AC_CONFIG_AUX_DIR([build])
 AC_CONFIG_MACRO_DIR([build])
 AC_CONFIG_HEADERS([build/config.h cairommconfig.h])
 
-AM_INIT_AUTOMAKE([1.10 -Wno-portability no-define nostdinc tar-pax])
-m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES])
+AM_INIT_AUTOMAKE([1.10 -Wno-portability no-dist-gzip dist-xz no-define nostdinc tar-pax])
+# Support silent build rules.
+# Disable by either passing --disable-silent-rules to configure or passing V=1 to make.
+m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 AM_MAINTAINER_MODE
 AC_ARG_VAR([ACLOCAL_FLAGS], [aclocal flags, e.g. -I <macro dir>])
 
@@ -44,7 +47,9 @@ AC_LIBTOOL_WIN32_DLL
 AC_PROG_LIBTOOL
 PKG_PROG_PKG_CONFIG
 
-AC_SUBST([CAIROMM_MODULES], ['cairo >= 1.10.0 sigc++-2.0 >= 2.5.1'])
+AC_SUBST([CAIROMM_EXTRA_LIBS], [''])
+AC_SUBST([CAIROMM_MODULES], ['cairo >= 1.12.0 sigc++-2.0 >= 2.6.0'])
+AC_SUBST([MSVC_TOOLSET_VER], [''])
 cairomm_allmodules=$CAIROMM_MODULES
 CAIROMM_INSTALL_PC='data/cairomm-1.0.pc'
 
@@ -58,7 +63,6 @@ do
   ])
 done
 AC_SUBST([CAIROMM_INSTALL_PC])
-PKG_CHECK_MODULES([CAIROMM], [$cairomm_allmodules])
 
 MM_ARG_ENABLE_DOCUMENTATION
 MM_ARG_WITH_TAGFILE_DOC([libstdc++.tag], [mm-common-libstdc++])
@@ -69,6 +73,7 @@ MM_ARG_ENABLE_WARNINGS([CAIROMM_WXXFLAGS],
                        [-Wall],
                        [-pedantic -Wall -Wextra -Wformat-security -Wsuggest-override],
                        [SIGCXX])
+MM_ARG_DISABLE_DEPRECATED_API
 
 AC_ARG_ENABLE([tests],
               [AS_HELP_STRING([--enable-tests], [enable automated tests [default=no]])],
@@ -86,16 +91,18 @@ AS_IF([test "x$ENABLE_TESTS" = xyes],
 #So we resort to hugly hacks to detect the version of
 #boost that is installed.
 #######################################################
-    AX_BOOST_BASE([1.33.1])
+    cairomm_allmodules="$cairomm_allmodules fontconfig"
+    AX_BOOST_BASE([1.63.0])
     AX_BOOST_UNIT_TEST_FRAMEWORK
 
-    dnl AX_BOOST_BASE defines a --with-boost[=DIR] option that sets
-    dnl $ac_boost_path as a custom boost prefix, so use that if it was specified
-    AS_IF([test "x$ac_boost_path" != x],
-          [for i in "$ac_boost_path/lib/libboost_unit_test_framework.a" \
-                    "$ac_boost_path/lib/libboost_unit_test_framework-st.a" \
-                    "$ac_boost_path/libboost_unit_test_framework.a" \
-                    "$ac_boost_path/libboost_unit_test_framework-st.a"
+    dnl AX_BOOST_BASE sets $BOOST_LDFLAGS as the boost library directory,
+    dnl so use that if it is available.
+    AS_IF([test "x$BOOST_LDFLAGS" != x],
+          [boost_lib_dir="${BOOST_LDFLAGS#-L}" # Remove -L prefix
+           for i in "$boost_lib_dir/lib/libboost_unit_test_framework.a" \
+                    "$boost_lib_dir/lib/libboost_unit_test_framework-st.a" \
+                    "$boost_lib_dir/libboost_unit_test_framework.a" \
+                    "$boost_lib_dir/libboost_unit_test_framework-st.a"
            do
                AS_IF([test -f "$i"], [BOOST_UNIT_TEST_FRAMEWORK_STATIC_LIB=$i; break])
            done],
@@ -115,8 +122,10 @@ using --with-boost=/path/to/lib])])
     AC_MSG_NOTICE([disabled support of automated tests])
 ])
 AC_SUBST([BOOST_UNIT_TEST_FRAMEWORK_STATIC_LIB])
-
 AM_CONDITIONAL([AUTOTESTS], [test "x$ENABLE_TESTS" = xyes])
+
+PKG_CHECK_MODULES([CAIROMM], [$cairomm_allmodules])
+
 CAIROMM_ARG_ENABLE_API_EXCEPTIONS
 
 AC_CONFIG_FILES([Makefile
@@ -138,8 +147,8 @@ AC_CONFIG_FILES([Makefile
                  data/cairomm-win32-font-1.0.pc
                  data/cairomm-xlib-1.0.pc
                  data/cairomm-xlib-xrender-1.0.pc
-                 MSVC_Net2013/cairomm/cairomm.rc])
+                 MSVC_NMake/cairomm/cairomm.rc])
 
-AC_CONFIG_COMMANDS([MSVC_Net2013/cairomm/cairommconfig.h],
-                   [cp -f cairommconfig.h MSVC_Net2013/cairomm/cairommconfig.h])
+AC_CONFIG_COMMANDS([MSVC_NMake/cairomm/cairommconfig.h],
+                   [cp -f cairommconfig.h MSVC_NMake/cairomm/cairommconfig.h])
 AC_OUTPUT

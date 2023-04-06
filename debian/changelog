@@ -1,3 +1,39 @@
+cairomm (1.14.4-2) unstable; urgency=medium
+
+  [ Debian Janitor ]
+  * Use secure URI in Homepage field.
+  * Add debian/upstream/metadata
+
+ -- Jeremy Bicha <jbicha@ubuntu.com>  Fri, 09 Dec 2022 14:47:06 -0500
+
+cairomm (1.14.4-1) unstable; urgency=medium
+
+  * New upstream release
+  * debian/control.in: Bump minimum meson to 0.55.0
+
+ -- Jeremy Bicha <jbicha@ubuntu.com>  Wed, 21 Sep 2022 15:49:39 -0400
+
+cairomm (1.14.3-1) unstable; urgency=medium
+
+  * New upstream release (Closes: #994884)
+  * Build with meson (Closes: #885063)
+  * debian/control.in: Build-Depend on doxygen, graphviz, & xsltproc
+  * Build-Depend on debhelper-compat 13
+  * Build-Depend on dh-sequence-gnome instead of gnome-pkg-tools
+  * Build-Depend on libboost-test-dev & libfontconfig-dev for build tests
+  * debian/control.in: Set Rules-Requires-Root: no
+  * Stop managing shlibs version by hand
+  * debian/rules: Drop unneeded -Wl,--as-needed
+  * debian/rules: Don't compress the example cc files
+  * debian/rules: Enable maintainer mode to build docs from source
+  * debian/copyright: Switch to copyright format 1.0
+  * debian/watch: Only watch for 1.14.x releases:
+    cairomm1.16 is a different ABI series intended for gtkmm 4 and will
+    be packaged separately
+  * Bump Standards-Version to 4.6.1
+
+ -- Jeremy Bicha <jbicha@ubuntu.com>  Thu, 01 Sep 2022 14:52:49 -0400
+
 cairomm (1.12.2-4) unstable; urgency=medium
 
   * Add -Wl,-O1 to our LDFLAGS
