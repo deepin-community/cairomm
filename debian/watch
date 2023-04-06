@@ -1,2 +1,3 @@
 version=4
-https://www.cairographics.org/releases/cairomm-(.*)\.tar\.gz
+https://www.cairographics.org/releases/ \
+	@PACKAGE@-(1.14[\d.]+)@ARCHIVE_EXT@

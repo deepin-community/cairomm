@@ -3,15 +3,22 @@ Section: libs
 Priority: optional
 Maintainer: Debian GNOME Maintainers <pkg-gnome-maintainers@lists.alioth.debian.org>
 Uploaders: @GNOME_TEAM@
-Build-Depends: debhelper (>= 11),
-               gnome-pkg-tools,
+Build-Depends: debhelper-compat (= 13),
+               dh-sequence-gnome,
+               doxygen,
+               graphviz,
+               libboost-test-dev <!nocheck>,
                libcairo2-dev (>= 1.10.0),
+               libfontconfig-dev <!nocheck>,
                libsigc++-2.0-dev (>= 2.5.1),
-               mm-common
-Standards-Version: 4.3.0
+               meson (>= 0.55.0),
+               mm-common,
+               xsltproc
+Rules-Requires-Root: no
+Standards-Version: 4.6.1
 Vcs-Browser: https://salsa.debian.org/gnome-team/cairomm
 Vcs-Git: https://salsa.debian.org/gnome-team/cairomm.git
-Homepage: http://cairographics.org/cairomm/
+Homepage: https://cairographics.org/cairomm/
 
 Package: libcairomm-1.0-dev
 Section: libdevel

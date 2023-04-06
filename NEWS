@@ -1,3 +1,94 @@
+1.14.4 (stable):
+
+Build:
+* Meson build: When mm-common >= 1.0.4 is used, Perl is not required
+  (Kjell Ahlstedt)
+* MSVC build: Support VS2022 builds
+  (Chun-wei Fan) Merge request !19
+* Meson build: Specify 'check' option in run_command()
+  Will be necessary with future versions of Meson.
+  Require Meson >= 0.55.0
+* Meson build: Avoid unnecessary configuration warnings
+  (Kjell Ahlstedt)
+* Meson build: Re-organize warnings-related compiler flags for MSVC
+  (Chun-wei Fan) Merge request !23
+* Autotools build: Add --disable-deprecated-api
+* Fix build with -Dbuild-deprecated-api=false
+  (Kjell Ahlstedt) Issue #29 (bbhtt)
+
+
+1.14.3 (stable):
+
+Build:
+* cairommconfig.h.*: Don't dllimport on MinGW
+  (Chun-wei Fan) Merge reqest !15
+  (Chun-wei Fan) Issue gtkmm#90 (Lukas K.)
+* Meson build: Make it possible to use cairomm as a subproject
+  (Kjell Ahlstedt)
+* Meson build: No implicit_include_directories
+  (Kjell Ahlstedt)
+* MSVC build: exception.h: Export Cairo::logic_error selectively
+  (Chun-wei Fan) Merge request !18
+
+
+1.14.2 (stable):
+
+The tarball for 1.14.2 has been created with 'meson dist'.
+If you build with Autotools from the tarball, please read the relevant
+part of the README file.
+
+Build:
+* Meson build: Fix versioning on macOS
+  (Kjell Ahlstedt, Tom Schoonjans)
+* Require cairo >= 1.12.0
+  Not a new requirement, but now it's specified in configure.ac and
+  meson.build, so a failure to meet it is noticed earlier when building
+  (Kjell Ahlstedt)
+
+
+1.14.0 (stable):
+
+The tarball for 1.14.0 has been created with 'meson dist'.
+If you build with Autotools from the tarball, please read the relevant
+part of the README file.
+
+Cairo:
+* Add Context::get_source_for_surface()
+  (Kjell Ahlstedt) Issue #5 (Ian Britten)
+
+Build:
+* Fix the build with MinGW headers
+  (Kalev Lember) Bug #92112
+* enums.h: Guard the FT-specific include and the enum with an ifdef
+  (John Ralls) Bug #100894
+* Add NMake Makefiles
+  Remove Visual Studio 2013 projects
+  (Chun-wei Fan) Issue #17, merge request !3, !6, !11, !12
+* Add support for building with Meson
+  (Kjell Ahlstedt, Chun-wei Fan) Merge request !2, !9
+* Use __declspec(dllexport) when building cairomm on Visual Studio
+  Stop using gendef.exe by default
+  (Chun-wei Fan) Merge request !4
+* docs/reference/: Update for Doxygen >= 1.8.16
+  (Kjell Ahlstedt)
+
+Tests:
+* Update the source code
+  (Kjell Ahlstedt, Chun-wei Fan) Merge request !1
+* Don't include deprecated Boost header files
+  Fix tests in Autotools builds
+  (Kjell Ahlstedt)
+
+Documentation:
+* README: Update with instructions for building cairomm
+  (Kjell Ahlstedt)
+
+
+1.13.1 (unstable):
+
+* Added RecordingSurface, wrapping cairo_recording_surface.
+  (Jason Rhinelander) Bug #121359
+
 1.12.2 (stable):
 
 * Remove new API that was not meant to be added in 1.12.1.
