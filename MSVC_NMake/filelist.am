@@ -13,4 +13,4 @@ msvc_nmake_data =		\
 	gendef/gendef.cc	\
 	generate-msvc.mak	\
 	Makefile.vc		\
-	README
+	MSVC-Builds.md

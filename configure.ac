@@ -15,7 +15,7 @@
 ## You should have received a copy of the GNU Lesser General Public License
 ## along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
-AC_INIT([cairomm], [1.14.4],
+AC_INIT([cairomm], [1.14.5],
         [https://gitlab.freedesktop.org/cairo/cairomm/-/issues],
         [cairomm], [http://www.cairographics.org/cairomm/])
 AC_PREREQ([2.62])
@@ -25,7 +25,7 @@ AC_CONFIG_AUX_DIR([build])
 AC_CONFIG_MACRO_DIR([build])
 AC_CONFIG_HEADERS([build/config.h cairommconfig.h])
 
-AM_INIT_AUTOMAKE([1.10 -Wno-portability no-dist-gzip dist-xz no-define nostdinc tar-pax])
+AM_INIT_AUTOMAKE([1.10 -Wno-portability no-dist-gzip dist-xz no-define nostdinc tar-pax foreign])
 # Support silent build rules.
 # Disable by either passing --disable-silent-rules to configure or passing V=1 to make.
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])

@@ -4,6 +4,13 @@ export DEB_BUILD_MAINT_OPTIONS  = hardening=+all
 export DEB_LDFLAGS_MAINT_APPEND = -Wl,-O1 -Wl,-z,defs
 export DPKG_GENSYMBOLS_CHECK_LEVEL = 4
 
+ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
+        TESTS += -Dbuild-tests=true
+else
+        TESTS += -Dbuild-tests=false
+endif
+
+
 %:
 	dh $@ --buildsystem=meson --without autoreconf
 
@@ -11,7 +18,7 @@ override_dh_auto_configure:
 	dh_auto_configure -- \
 		-Dboost-shared=true \
 		-Dbuild-documentation=true \
-		-Dbuild-tests=true \
+		${TESTS} \
 		-Dmaintainer-mode=true \
 		-Dwarnings=max
 

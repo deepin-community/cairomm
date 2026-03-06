@@ -1,6 +1,42 @@
 # cairomm
 This library provides a C++ interface to cairo.
-See https://www.cairographics.org/cairomm/
+
+# General information
+
+cairomm-1.0 and cairomm-1.16 are different parallel-installable ABIs.
+This file describes cairomm-1.0.
+
+Web site
+ - https://www.cairographics.org/cairomm/
+
+Download location
+ - https://www.cairographics.org/releases/
+
+Reference documentation
+ - https://www.cairographics.org/documentation/cairomm/reference/
+ - https://cairo.pages.freedesktop.org/cairomm
+
+The reference documentation on the web describes a version of cairomm,
+which is not ABI-compatible with the cairomm-1.0 ABI series.
+Tarballs contain reference documentation. In tarballs generated with Meson,
+see the untracked/docs/reference/html directory.
+
+Mailing list
+ - https://lists.cairographics.org/cgi-bin/mailman/listinfo/cairo
+
+Git repository
+ - https://gitlab.freedesktop.org/cairo/cairomm
+
+Bugs can be reported to
+ - https://gitlab.freedesktop.org/cairo/cairomm/-/issues
+
+Patches can be submitted to
+ - https://gitlab.freedesktop.org/cairo/cairomm/-/merge_requests
+
+# Building
+
+Whenever possible, you should use the official binary packages approved by the
+supplier of your operating system, such as your Linux distribution.
 
 See the examples directory for example code.
 
@@ -11,14 +47,9 @@ Use pkg-config to discover the necessary include and linker arguments. For insta
 If you build with Autotools, ideally you would use PKG_CHECK_MODULES in your
 configure.ac file.
 
-# Building
-
-Whenever possible, you should use the official binary packages approved by the
-supplier of your operating system, such as your Linux distribution.
-
 ## Building on Windows
 
-See MSVC_NMake/README
+See [MSVC-Builds](MSVC_NMake/MSVC-Builds.md)
 
 ## Building from a release tarball
 
@@ -41,7 +72,7 @@ of untracked/.
 Don't call the builddir 'build'. There is a directory called 'build' with
 files used by Autotools.
 ```
-  $ meson --prefix /some_directory --libdir lib your_builddir .
+  $ meson setup --prefix /some_directory --libdir lib your_builddir .
   $ cd your_builddir
 ```
 
@@ -98,7 +129,7 @@ Maintainer-mode is enabled by default when you build from a git clone.
 Don't call the builddir 'build'. There is a directory called 'build' with
 files used by Autotools.
 ```
-  $ meson --prefix /some_directory --libdir lib your_builddir .
+  $ meson setup --prefix /some_directory --libdir lib your_builddir .
   $ cd your_builddir
   $ ninja
   $ ninja install

@@ -1,3 +1,73 @@
+2023-09-27  Kjell Ahlstedt  <kjellahlstedt@gmail.com>
+
+  1.14.5
+
+2023-09-27  Kjell Ahlstedt  <kjellahlstedt@gmail.com>
+
+  meson_options.txt: boost-shared defaults to true
+
+  The shared Boost libraries can be a safer choice.
+  The static libraries have caused problems building the test programs.
+
+2023-07-06  Kjell Ahlstedt  <kjellahlstedt@gmail.com>
+
+  Remove AUTHORS and MAINTAINERS and add info to README.md
+
+2023-06-29  Chun-wei Fan  <fanc999@yahoo.com.tw>
+
+  Improve Visual Studio build documentation
+
+  Update the Visual Studio build documentation by:
+  
+  * Convert MSVC_NMake/README to MarkDown format, to make it easier on the
+    eye.
+  * Mention that cairo-1.17.x is recommended.
+  * Make the build process for both NMake and Meson builds clearer.
+
+2023-06-17  Kjell Ahlstedt  <kjellahlstedt@gmail.com>
+
+  Doxyfile.in: Remove obsolete entries
+
+2023-06-17  Daniel Boles  <dboles.src@gmail.com>
+
+  enums: Fix typos of "teh" to "the" + missing "a"
+
+  See !26
+
+2023-03-12  Kjell Ahlstedt  <kjellahlstedt@gmail.com>
+
+  README.md: meson -> meson setup
+
+2023-03-12  Kjell Ahlstedt  <kjellahlstedt@gmail.com>
+
+  meson.build: Simplify if-file-exists test
+
+2023-01-04  Kjell Ahlstedt  <kjellahlstedt@gmail.com>
+
+  meson.build: Simplify lookup of python command
+
+  See libsigcplusplus PR#83
+
+2023-01-04  Kjell Ahlstedt  <kjellahlstedt@gmail.com>
+
+  meson.build: Fix the evaluation of is_git_build on Windows
+
+  See gtkmm#131
+
+2023-01-04  Kjell Ahlstedt  <kjellahlstedt@gmail.com>
+
+  Meson build: Don't copy files with configure_file()
+
+  It's deprecated from Meson 0.64. The replacement, fs.copyfile(),
+  is not useful here. It only copies from the source directory to
+  the build directory.
+
+2022-09-27  Kjell Ahlstedt  <kjellahlstedt@gmail.com>
+
+  meson.build: Detect if we build from a git subtree
+
+  See https://gitlab.gnome.org/GNOME/gtkmm/-/merge_requests/72 (William Roy)
+
 2022-09-21  Kjell Ahlstedt  <kjellahlstedt@gmail.com>
 
   1.14.4
@@ -1573,91 +1643,4 @@
 
   	* cairomm/fontface.cc: Fix the default implementation of UserFontFace::init()
   	to set up the font extents parameter correctly according to the documentation
-
-2008-12-08  Jonathon Jongsma  <jjongsma@gnome.org>
-
-  Fix the UserFontFace::text_to_glyphs default vfunc
-
-  	* cairomm/fontface.cc: 'fix' the text_to_glyphs implementation so that the
-  	default virtual function will be bypassed and the unicode_to_glyph will be
-  	called instead.  This is done in the C implementation by passing a negative
-  	value for the num_glyphs output parameter, but since we're using a std::vector
-  	for the glyphs, it's not possible to return a negative value.  So I'm using an
-  	ugly hack that will set a boolean flag the first time the default
-  	text_to_glyphs vfunc is called (which implies that that function has not been
-  	reimplemented in a derived class), and if we check that boolean flag and it is
-  	set, we will pass a negative value down to the C caller
-
-2008-12-08  Jonathon Jongsma  <jjongsma@gnome.org>
-
-  UserFontFace redesign to use virtual functions
-
-  	* cairomm/fontface.cc:
-  	* cairomm/fontface.h: Change UserFontFace implementation to a vfunc-based
-  	implementation rather than requiring people to supply callbacks at runtime as
-  	sigc::slot objects.  This was requested by Ian Britten on the mailing list and
-  	was my original plan but ran into issues in my original implementation.  This
-  	isn't a fully-working implementation yet, but I think I can overcome the
-  	issues now, so I'm moving forward on the redesign.
-  	* tests/test-font-face.cc: disable UserFontFace tests for now
-  
-  Conflicts:
-  
-  	ChangeLog
-  	cairomm/fontface.cc
-  	cairomm/fontface.h
-
-2008-12-05  Jonathon Jongsma  <jjongsma@gnome.org>
-
-  Fix some ScaledFont referencing issues
-
-  Fix an error in ScaledFont::get_font_face() where we were releasing a reference
-  we didn't hold.  Also fix a rather severe memory leak where we weren't calling
-  cairo_scaled_font_destroy in the ScaledFont destructor.  I added a virtual
-  destructor to ScaledFont, which theoretically changes ABI, but I don't see how
-  anybody could be using ScaledFont in cairomm currently without serious memory
-  leaks, so I think it's worthwhile to make this change
-
-2008-11-14  Jonathon Jongsma  <jjongsma@gnome.org>
-
-  win32 build fixes
-
-2008-11-14  Jonathon Jongsma  <jjongsma@gnome.org>
-
-  Support --with-boost configure option
-
-  	* configure.in: support the --with-boost=[boost_path] option for specifying
-  	the install path of boost libraries
-
-2008-10-30  Dave Evans  <devans@macports.org>
-
-  Undefine 'nil' on OSX before including sigc++ header to fix compile
-
-2008-10-29  Jonathon Jongsma  <jjongsma@gnome.org>
-
-  distribute autogen.sh
-
-2008-10-25  Jonathon Jongsma  <jjongsma@gnome.org>
-
-  distcheck fixes
-
-2008-10-25  Jonathon Jongsma  <jjongsma@gnome.org>
-
-  mark 1.7.0 as unstable in the NEWS file
-
-2008-10-22  Jonathon Jongsma  <jjongsma@gnome.org>
-
-  add NEWS for 1.7.x
-
-2008-10-22  Jonathon Jongsma  <jjongsma@gnome.org>
-
-  Minor doxygen fixes
-
-  	* cairomm/matrix.h: add a link to the cairo reference for cairo_matrix_t
-  	* docs/reference/Doxyfile.in: don't generate docs for the members of the
-  	Cairo::Private namespace
-
-2008-10-22  Jonathon Jongsma  <jjongsma@gnome.org>
-
-  bump version to 1.7.0
 
