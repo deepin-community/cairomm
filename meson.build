@@ -1,7 +1,7 @@
 # This file is part of cairomm.
 
 project('cairomm', 'cpp',
-  version: '1.14.4',
+  version: '1.14.5',
   license: 'LGPLv2+',
   default_options: [
     'cpp_std=c++11',
@@ -45,22 +45,23 @@ project_build_root = meson.current_build_dir()
 
 cpp_compiler = meson.get_compiler('cpp')
 is_msvc = cpp_compiler.get_id() == 'msvc'
-python3 = import('python').find_installation()
-
-python_version = python3.language_version()
-python_version_req = '>= 3.5'
-if not python_version.version_compare(python_version_req)
-  error('Requires Python @0@, found @1@.'.format(python_version_req, python_version))
-endif
+python3 = find_program('python3', version: '>=3.5')
 
 # Do we build from a git repository?
-# Suppose we do if and only if a '.git' directory or file exists.
+# Suppose we do if and only if the meson.build file is tracked by git.
 cmd_py = '''
-import os
-import sys
-sys.exit(os.path.isdir("@0@") or os.path.isfile("@0@"))
-'''.format(project_source_root / '.git')
-is_git_build = run_command(python3, '-c', cmd_py, check: false).returncode() != 0
+import shutil, subprocess, sys
+git_exe = shutil.which('git')
+if not git_exe:
+  sys.exit(1)
+cmd = [ git_exe, 'ls-files', '--error-unmatch', 'meson.build' ]
+sys.exit(subprocess.run(cmd, cwd=sys.argv[1], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode)
+'''
+is_git_build = run_command(
+  python3, '-c', cmd_py,
+  project_source_root,
+  check: false,
+).returncode() == 0
 
 # Are we testing a dist tarball while it's being built?
 # There ought to be a better way. https://github.com/mesonbuild/meson/issues/6866
@@ -175,17 +176,9 @@ if maintainer_mode
     project_source_root / 'untracked' / 'docs',
     check: true,
   )
-else
-  cmd_py = '''
-import os
-import sys
-sys.exit(os.path.isfile("@0@"))
-'''.format(doc_reference_py)
-  file_exists = run_command(python3, '-c', cmd_py, check: false).returncode() != 0
-  if not file_exists
-    warning('Missing files in untracked/. ' + \
-    'Enable maintainer-mode if you want to build documentation or create a dist tarball.')
-  endif
+elif not import('fs').is_file(doc_reference_py)
+  warning('Missing files in untracked/.\n  ' + \
+  'Enable maintainer-mode if you want to build documentation or create a dist tarball.')
 endif
 
 # Check if perl is required and available.
@@ -291,9 +284,10 @@ mm_conf_data.set('CAIROMM_MINOR_VERSION', cairomm_minor_version)
 mm_conf_data.set('CAIROMM_MICRO_VERSION', cairomm_micro_version)
 mm_conf_data.set('VERSION', meson.project_version()) # for MSVC_NMake/cairomm/cairomm.rc
 
+cairommconfig_h_meson = files('cairommconfig.h.meson')
 install_includeconfigdir = install_libdir / cairomm_pcname / 'include'
-cairommconfig_h = configure_file(
-  input: 'cairommconfig.h.meson',
+configure_file(
+  input: cairommconfig_h_meson,
   output: 'cairommconfig.h',
   configuration: mm_conf_data,
   install_dir: install_includeconfigdir,

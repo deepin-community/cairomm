@@ -1,6 +1,6 @@
 # MSVC_NMake/cairomm
 
-# Input: mm_conf_data, cairommconfig_h
+# Input: mm_conf_data, cairommconfig_h_meson
 # Output: cairomm_rc
 
 cairomm_rc = configure_file(
@@ -9,9 +9,9 @@ cairomm_rc = configure_file(
   configuration: mm_conf_data,
 )
 
-# Copy the generated configuration header into the MSVC project directory.
+# Make a copy of the generated configuration header in the MSVC project directory.
 configure_file(
-  input: cairommconfig_h,
+  input: cairommconfig_h_meson,
   output: 'cairommconfig.h',
-  copy: true,
+  configuration: mm_conf_data,
 )

@@ -201,12 +201,12 @@ typedef enum
     LINE_CAP_BUTT = CAIRO_LINE_CAP_BUTT,
 
     /**
-     * Use a round ending, the center of teh circle is teh end point
+     * Use a round ending, the center of the circle is the end point
      */
     LINE_CAP_ROUND = CAIRO_LINE_CAP_ROUND,
 
     /**
-     * Use squared ending, the center of teh square is the end point
+     * Use a squared ending, the center of the square is the end point
      */
     LINE_CAP_SQUARE = CAIRO_LINE_CAP_SQUARE
 } LineCap;
@@ -224,7 +224,7 @@ typedef enum
     LINE_JOIN_MITER = CAIRO_LINE_JOIN_MITER,
 
     /**
-     * Use a rounded join, the center of teh circle is the joint point
+     * Use a rounded join, the center of the circle is the joint point
      */
     LINE_JOIN_ROUND = CAIRO_LINE_JOIN_ROUND,
 

@@ -1,3 +1,24 @@
+1.14.5 (stable):
+
+Documentation:
+* Context: Fix some typos
+  (Daniel Boles) Merge request !26
+* Update Visual Studio build docs
+  (Chun-wei Fan) Merge request !27
+* Remove AUTHORS and MAINTAINERS; add info to README.md
+  (Kjell Ahlstedt) Issue gtkmm#140
+
+Meson build:
+* Detect if we build from a git subtree
+  (William Roy) Merge request gtkmm!72
+* Don't copy files with configure_file()
+  (Kjell Ahlstedt)
+* Fix the evaluation of is_git_build on Windows
+  (Kjell Ahlstedt) Issue gtkmm#131 (William Roy)
+* The boost-shared option defaults to true
+  (Kjell Ahlstedt)
+
+
 1.14.4 (stable):
 
 Build:

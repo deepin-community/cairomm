@@ -35,7 +35,7 @@ include $(srcdir)/MSVC_NMake/filelist.am
 
 msvc_files = $(addprefix MSVC_NMake/,$(msvc_nmake_data))
 
-dist_noinst_DATA = MAINTAINERS $(msvc_files)
+dist_noinst_DATA = README.md $(msvc_files)
 dist_noinst_SCRIPTS = autogen.sh
 
 DISTCLEANFILES = MSVC_NMake/cairomm/cairommconfig.h
